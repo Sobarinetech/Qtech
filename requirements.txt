@@ -1,6 +1,4 @@
 streamlit
 Pillow
-qrcode[pil]
+qrcode
 pyzbar
-opencv-python-headless
-zbar 
