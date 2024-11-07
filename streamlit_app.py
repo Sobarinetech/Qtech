@@ -4,7 +4,8 @@ import qrcode
 from io import BytesIO
 import zipfile
 import datetime
-from pyzbar.pyzbar import decode
+import cv2
+import numpy as np
 
 # Helper function to generate a QR code
 def generate_qr(data, fill_color="black", back_color="white", box_size=10, border=4, error_correction=qrcode.constants.ERROR_CORRECT_M):
@@ -26,11 +27,19 @@ def pil_to_bytes(img):
     byte_arr.seek(0)
     return byte_arr
 
-# Function to decode QR Code
+# Function to decode QR Code using OpenCV
 def decode_qr(image):
-    decoded_data = decode(image)
-    if decoded_data:
-        return decoded_data[0].data.decode("utf-8")
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
+    
+    # Create a QRCodeDetector object
+    detector = cv2.QRCodeDetector()
+    
+    # Detect and decode the QR code
+    value, pts, qr_code = detector(gray)
+    
+    if value:
+        return value
     return "No QR Code detected"
 
 # Main page of the app
