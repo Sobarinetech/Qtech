@@ -2,13 +2,10 @@ import streamlit as st
 from PIL import Image
 import qrcode
 from io import BytesIO
-import csv
 import zipfile
-from pyzbar.pyzbar import decode
-import base64
-from datetime import datetime
+import datetime
 
-# Helper function to generate QR code
+# Helper function to generate a QR code
 def generate_qr(data, fill_color="black", back_color="white", box_size=10, border=4, error_correction=qrcode.constants.ERROR_CORRECT_M):
     qr = qrcode.QRCode(
         version=1,
@@ -24,7 +21,7 @@ def generate_qr(data, fill_color="black", back_color="white", box_size=10, borde
 # Sidebar for app navigation
 st.sidebar.title("QR Code Utilities")
 app_mode = st.sidebar.selectbox("Choose a tool", [
-    "Generate QR Code", "Decode QR Code", "Batch QR Generation", "Customize QR Code", "QR Code with Logo"
+    "Generate QR Code", "Batch QR Generation", "Customize QR Code", "QR Code with Logo"
 ])
 
 # QR Code Generator with Multiple Types
@@ -80,50 +77,24 @@ if app_mode == "Generate QR Code":
         buffer = BytesIO()
         qr_img.save(buffer, format="PNG")
         st.download_button("Download QR Code as PNG", buffer.getvalue(), file_name="qr_code.png", mime="image/png")
-        svg_buffer = BytesIO()
-        qr_img.save(svg_buffer, format="SVG")
-        st.download_button("Download QR Code as SVG", svg_buffer.getvalue(), file_name="qr_code.svg", mime="image/svg+xml")
-
-# QR Code Decoder
-elif app_mode == "Decode QR Code":
-    st.title("QR Code Decoder")
-    uploaded_file = st.file_uploader("Upload a QR Code image", type=["png", "jpg", "jpeg"])
-    if uploaded_file:
-        img = Image.open(uploaded_file)
-        st.image(img, caption="Uploaded QR Code", use_column_width=True)
-
-        decoded_info = decode(img)
-        if decoded_info:
-            st.subheader("Decoded Information")
-            for obj in decoded_info:
-                st.write(obj.data.decode("utf-8"))
-        else:
-            st.error("No QR code found in the uploaded image.")
 
 # Batch QR Code Generation
 elif app_mode == "Batch QR Generation":
     st.title("Batch QR Code Generator")
-    st.write("Upload a CSV file with a column of data to generate multiple QR codes.")
-    uploaded_csv = st.file_uploader("Upload CSV File", type=["csv"])
+    st.write("Enter each line of text or URL to generate multiple QR codes.")
+    batch_data = st.text_area("Enter data, one item per line")
 
-    if uploaded_csv:
-        csv_data = uploaded_csv.getvalue().decode("utf-8")
-        reader = csv.reader(csv_data.splitlines())
-        data_list = list(reader)
-
-        if st.button("Generate Batch QR Codes"):
-            with st.spinner("Generating QR codes..."):
-                zip_buffer = BytesIO()
-                with zipfile.ZipFile(zip_buffer, "w") as zip_file:
-                    for i, row in enumerate(data_list):
-                        if row:  # Non-empty row
-                            img = generate_qr(row[0])
-                            img_buffer = BytesIO()
-                            img.save(img_buffer, format="PNG")
-                            zip_file.writestr(f"qr_code_{i+1}.png", img_buffer.getvalue())
-                
-                st.success("Batch QR code generation completed!")
-                st.download_button("Download ZIP file", zip_buffer.getvalue(), file_name="qr_codes.zip", mime="application/zip")
+    if batch_data:
+        data_list = batch_data.strip().split("\n")
+        zip_buffer = BytesIO()
+        with zipfile.ZipFile(zip_buffer, "w") as zip_file:
+            for i, item in enumerate(data_list):
+                img = generate_qr(item)
+                img_buffer = BytesIO()
+                img.save(img_buffer, format="PNG")
+                zip_file.writestr(f"qr_code_{i+1}.png", img_buffer.getvalue())
+        
+        st.download_button("Download ZIP file of QR Codes", zip_buffer.getvalue(), file_name="qr_codes.zip", mime="application/zip")
 
 # QR Code Customization
 elif app_mode == "Customize QR Code":
