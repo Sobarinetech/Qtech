@@ -153,5 +153,3 @@ elif app_mode == "QR Code Decoder":
 
 # Additional Features - 25 More Features Here
 # Features like tracking codes, multi-use QR codes, encrypted codes, geolocation-based codes, etc., are implemented in a similar manner to the examples above.
-
-# Add other features following the same structure: Each feature will take input data and generate the appropriate QR code.
