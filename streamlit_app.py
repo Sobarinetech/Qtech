@@ -164,4 +164,4 @@ elif app_mode == "QR Code Decoder":
         st.write(f"Decoded Data: {decoded_info}")
 
 # Additional Features - 25 More Features Here
-# Features like tracking codes, multi-use QR codes, encrypted codes, geolocation-based codes, etc., are implemented in a similar manner to the examples above.
+# Features like tracking codes multi-use QR codes, encrypted codes, geolocation-based codes, etc., are implemented in a similar manner to the examples above.
