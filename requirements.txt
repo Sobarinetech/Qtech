@@ -3,3 +3,4 @@ Pillow
 qrcode[pil]
 pyzbar
 opencv-python-headless
+zbar 
