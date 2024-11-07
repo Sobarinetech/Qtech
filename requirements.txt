@@ -1,5 +1,5 @@
 streamlit
 Pillow
-qrcode
+qrcode[pil]
 pyzbar
-opencv-python-headless 
+opencv-python-headless
