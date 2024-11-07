@@ -103,6 +103,7 @@ if app_mode == "Generate QR Code":
         qr_img = generate_qr(data)
         st.image(qr_img, caption="Generated QR Code", use_column_width=True)
 
+        # Convert to byte stream for download button
         buffer = pil_to_bytes(qr_img)
         st.download_button("Download QR Code as PNG", buffer, file_name="qr_code.png", mime="image/png")
 
@@ -132,6 +133,7 @@ elif app_mode == "Customize QR Code":
         qr_img = generate_qr(data, fill_color, back_color, error_correction=error_levels[error_correction])
         st.image(qr_img, caption="Customized QR Code", use_column_width=True)
 
+        # Convert to byte stream for download button
         buffer = pil_to_bytes(qr_img)
         st.download_button("Download Customized QR Code", buffer, file_name="custom_qr_code.png", mime="image/png")
 
@@ -148,6 +150,7 @@ elif app_mode == "QR Code with Logo":
 
         st.image(qr_img, caption="QR Code with Logo", use_column_width=True)
 
+        # Convert to byte stream for download button
         buffer = pil_to_bytes(qr_img)
         st.download_button("Download QR Code with Logo", buffer, file_name="qr_code_with_logo.png", mime="image/png")
 
