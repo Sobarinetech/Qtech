@@ -3,7 +3,6 @@ from PIL import Image
 import qrcode
 from io import BytesIO
 import zipfile
-import datetime
 import cv2
 import numpy as np
 
@@ -41,13 +40,6 @@ def decode_qr(image):
     if value:
         return value
     return "No QR Code detected"
-
-# Function to generate a dynamic QR code with tracking functionality
-def generate_dynamic_qr(data, tracking_url):
-    # You could implement dynamic QR functionality with a URL shortening service or custom tracking
-    # For simplicity, we are creating a static dynamic link to a URL
-    dynamic_link = f"{tracking_url}?data={data}"
-    return generate_qr(dynamic_link)
 
 # Main page of the app
 st.title("QR Code Utilities")
@@ -173,7 +165,5 @@ elif app_mode == "QR Code Decoder":
 # Additional Features - Explained:
 # 1. **QR Code Styling**: Customize the QR code's appearance (colors, shapes, etc.)
 # 2. **QR Code Animation**: Integrate animated QR codes (create sequence-based animations)
-# 3. **Add a Border**: Allow users to add a border around their QR code.
-# 4. **Tracking QR Codes**: Implement tracking features for scanned QR codes via links.
-
-# The app continues with more advanced functionalities (not listed in full here).
+# 3. **Add a Border**: Add a border to the QR code (size, color, etc.)
+# 4. **Error Correction Level**: Choose from
