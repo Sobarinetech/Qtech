@@ -1,13 +1,53 @@
 import streamlit as st
-import google.generativeai as genai
+import io
 import qrcode
 from PIL import Image, ImageDraw, ImageOps
-import io
+import google.generativeai as genai
 import random
-from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 # Configure API keys securely from Streamlit's secrets
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+
+# QR Code Generator Function
+def generate_qr(data, error_correction, box_size, border, fill_color, back_color, logo=None, rounded=False, shadow=False, rotate_angle=0, background_img=None, custom_icon=None):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=error_correction,
+        box_size=box_size,
+        border=border,
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color=fill_color, back_color=back_color)
+
+    if logo:
+        logo_img = Image.open(logo)
+        pos = ((img.size[0] - logo_img.size[0]) // 2, (img.size[1] - logo_img.size[1]) // 2)
+        img.paste(logo_img, pos)
+
+    if rounded:
+        img = ImageOps.expand(img, border=10, fill=fill_color)
+        mask = Image.new('L', img.size, 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse((10, 10, img.size[0] - 10, img.size[1] - 10), fill=255)
+        img.putalpha(mask)
+
+    if shadow:
+        img = ImageOps.expand(img, border=5, fill=back_color)
+
+    if rotate_angle:
+        img = img.rotate(rotate_angle, expand=True)
+
+    if background_img:
+        background = Image.open(background_img)
+        background.paste(img, ((background.size[0] - img.size[0]) // 2, (background.size[1] - img.size[1]) // 2))
+        img = background
+
+    if custom_icon:
+        icon_img = Image.open(custom_icon)
+        img.paste(icon_img, ((img.size[0] - icon_img.size[0]) // 2, (img.size[1] - icon_img.size[1]) // 2))
+
+    return img
 
 # Streamlit App UI for Generative AI with QR Code
 st.title("Advanced QR Code Generator with Generative AI")
@@ -31,27 +71,15 @@ if st.button("Generate AI Response"):
     except Exception as e:
         st.error(f"Error: {e}")
 
-# AI-Generated QR Code Description
-def generate_qr_description(prompt):
-    # Load pre-trained language model and tokenizer
-    model = T5ForConditionalGeneration.from_pretrained('t5-small')
-    tokenizer = T5Tokenizer.from_pretrained('t5-small')
-    
-    input_ids = tokenizer.encode(prompt, return_tensors='pt')
-    output = model.generate(input_ids, max_length=50)
-    description = tokenizer.decode(output[0], skip_special_tokens=True)
-    return description
-
-# QR Code Generator Options
+# QR Code Generation UI
 st.header("QR Code Generator")
 
-# QR Code Type Selection
 option = st.selectbox(
     "Select the type of QR code you want to create:",
     ("URL", "Contact Information (vCard)", "Email", "Geo Location", "Event (vCalendar)", "Text", "Wi-Fi", "SMS", "Payment Link", "3D Effect", "Dynamic Content")
 )
 
-# Collecting data based on selected QR code type
+# Input fields based on selected QR code type
 if option == "URL":
     data = st.text_input("Enter the URL:")
 elif option == "Contact Information (vCard)":
@@ -93,9 +121,9 @@ elif option == "Payment Link":
 elif option == "3D Effect":
     data = st.text_input("Enter the data for 3D QR code:")
 elif option == "Dynamic Content":
-    data = f"https://api.example.com/qrdata/{random.randint(1000, 9999)}"  # Example dynamic data
+    data = f"https://api.example.com/qrdata/{random.randint(1000, 9999)}"
 
-# Additional customization options
+# Customization options
 error_correction = st.selectbox("Select Error Correction Level:", [
     qrcode.constants.ERROR_CORRECT_L,
     qrcode.constants.ERROR_CORRECT_M,
@@ -113,70 +141,20 @@ rotate_angle = st.slider("Rotate QR Code (degrees):", 0, 360, 0)
 background_img = st.file_uploader("Upload Background Image (optional):", type=["png", "jpg", "jpeg"])
 custom_icon = st.file_uploader("Upload Custom Icon (optional):", type=["png", "jpg", "jpeg"])
 
-def generate_qr(data, error_correction, box_size, border, fill_color, back_color, logo=None, rounded=False, shadow=False, rotate_angle=0, background_img=None, custom_icon=None):
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=error_correction,
-        box_size=box_size,
-        border=border,
-    )
-    qr.add_data(data)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color=fill_color, back_color=back_color)
-
-    if logo:
-        logo_img = Image.open(logo)
-        pos = ((img.size[0] - logo_img.size[0]) // 2, (img.size[1] - logo_img.size[1]) // 2)
-        img.paste(logo_img, pos)
-
-    if rounded:
-        img = ImageOps.expand(img, border=10, fill=fill_color)
-        mask = Image.new('L', img.size, 0)
-        draw = ImageDraw.Draw(mask)
-        draw.ellipse((10, 10, img.size[0] - 10, img.size[1] - 10), fill=255)
-        img.putalpha(mask)
-
-    if shadow:
-        img = ImageOps.expand(img, border=5, fill=back_color)
-
-    if rotate_angle:
-        img = img.rotate(rotate_angle, expand=True)
-
-    if background_img:
-        background = Image.open(background_img)
-        background.paste(img, ((background.size[0] - img.size[0]) // 2, (background.size[1] - img.size[1]) // 2))
-        img = background
-
-    if custom_icon:
-        icon_img = Image.open(custom_icon)
-        img.paste(icon_img, ((img.size[0] - icon_img.size[0]) // 2, (img.size[1] - icon_img.size[1]) // 2))
-
-    return img
-
-def generate_3d_qr(data, error_correction, box_size, border, fill_color, back_color):
-    # Implement your 3D QR code generation logic here
-    pass
-
 # Generate QR Code button
 if st.button("Generate QR Code"):
     if data:
-        description = generate_qr_description(prompt)
-        st.write("Generated QR Code Description:")
-        st.write(description)
+        img = generate_qr(data, error_correction, box_size, border, fill_color, back_color, logo, rounded, shadow, rotate_angle, background_img, custom_icon)
         
-        if option == "3D Effect":
-            img = generate_3d_qr(data, error_correction, box_size, border, fill_color, back_color)
-        else:
-            img = generate_qr(data, error_correction, box_size, border, fill_color, back_color, logo, rounded, shadow, rotate_angle, background_img, custom_icon)
+        # Display the generated QR code
+        st.image(img, caption="Your QR Code", use_column_width=True)
 
-        # Show the generated QR Code
-        st.image(img, caption="Your QR Code")
-
-        # Allow download
+        # Convert image to byte stream for download
         img_buffer = io.BytesIO()
         img.save(img_buffer, format="PNG")
         img_buffer.seek(0)
 
+        # Provide the option to download the QR code image
         st.download_button(
             label="Download QR Code",
             data=img_buffer,
