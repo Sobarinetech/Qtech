@@ -4,3 +4,4 @@ qrcode
 pyzbar
 pyqrcode
 cv2
+google.generativeai
