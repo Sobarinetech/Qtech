@@ -1,4 +1,4 @@
 streamlit
-google.generativeai
+google_generativeai
 qrcode
-PIL 
+Pillow 
