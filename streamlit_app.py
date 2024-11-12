@@ -6,6 +6,7 @@ import io
 import random
 import torch
 from transformers import T5ForConditionalGeneration, T5Tokenizer
+import sentencepiece as sp
 
 # Configure API keys securely from Streamlit's secrets
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
