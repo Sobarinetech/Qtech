@@ -144,21 +144,26 @@ custom_icon = st.file_uploader("Upload Custom Icon (optional):", type=["png", "j
 # Generate QR Code button
 if st.button("Generate QR Code"):
     if data:
+        if logo:
+            logo = logo.getvalue()
+        if background_img:
+            background_img = background_img.getvalue()
+        if custom_icon:
+            custom_icon = custom_icon.getvalue()
+        
         img = generate_qr(data, error_correction, box_size, border, fill_color, back_color, logo, rounded, shadow, rotate_angle, background_img, custom_icon)
         
         if img:
             # Display the generated QR code
-            st.image(img, caption="Your QR Code", use_column_width=True)
-
-            # Convert image to byte stream for download
             img_buffer = io.BytesIO()
             img.save(img_buffer, format="PNG")
-            img_buffer.seek(0)
+            img_bytes = img_buffer.getvalue()
+            st.image(img_bytes, caption="Your QR Code", use_column_width=True)
 
             # Provide the option to download the QR code image
             st.download_button(
                 label="Download QR Code",
-                data=img_buffer,
+                data=img_bytes,
                 file_name="qr_code.png",
                 mime="image/png",
             )
