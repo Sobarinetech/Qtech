@@ -4,7 +4,6 @@ import qrcode
 from PIL import Image, ImageDraw, ImageOps
 import io
 import random
-import torch
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 # Configure API keys securely from Streamlit's secrets
