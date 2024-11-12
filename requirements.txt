@@ -4,3 +4,4 @@ qrcode
 Pillow 
 torch
 transformers
+sentencepiece
