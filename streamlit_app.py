@@ -4,8 +4,10 @@ import qrcode
 from PIL import Image, ImageDraw, ImageOps
 import io
 import random
+import torch
+from transformers import T5ForConditionalGeneration, T5Tokenizer
 
-# Configure the API key securely from Streamlit's secrets
+# Configure API keys securely from Streamlit's secrets
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 # Streamlit App UI for Generative AI with QR Code
@@ -29,6 +31,17 @@ if st.button("Generate AI Response"):
         st.write(response.text)
     except Exception as e:
         st.error(f"Error: {e}")
+
+# AI-Generated QR Code Description
+def generate_qr_description(prompt):
+    # Load pre-trained language model and tokenizer
+    model = T5ForConditionalGeneration.from_pretrained('t5-small')
+    tokenizer = T5Tokenizer.from_pretrained('t5-small')
+    
+    input_ids = tokenizer.encode(prompt, return_tensors='pt')
+    output = model.generate(input_ids, max_length=50)
+    description = tokenizer.decode(output[0], skip_special_tokens=True)
+    return description
 
 # QR Code Generator Options
 st.header("QR Code Generator")
@@ -148,6 +161,10 @@ def generate_3d_qr(data, error_correction, box_size, border, fill_color, back_co
 # Generate QR Code button
 if st.button("Generate QR Code"):
     if data:
+        description = generate_qr_description(prompt)
+        st.write("Generated QR Code Description:")
+        st.write(description)
+        
         if option == "3D Effect":
             img = generate_3d_qr(data, error_correction, box_size, border, fill_color, back_color)
         else:
