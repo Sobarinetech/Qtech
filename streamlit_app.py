@@ -150,14 +150,15 @@ if st.button("Generate QR Code"):
         st.image(img, caption="Your QR Code", use_column_width=True)
 
         # Convert image to byte stream for download
-        img_buffer = io.BytesIO()
-        img.save(img_buffer, format="PNG")
-        img_buffer.seek(0)
+img_buffer = io.BytesIO()
+img.save(img_buffer, format="PNG")
+img_buffer.seek(0)
 
-        # Provide the option to download the QR code image
-        st.download_button(
-            label="Download QR Code",
-            data=img_buffer,
-            file_name="qr_code.png",
-            mime="image/png",
-        )
+# Provide the option to download the QR code image
+st.download_button(
+    label="Download QR Code",
+    data=img_buffer,
+    file_name="qr_code.png",
+    mime="image/png",
+)
+
