@@ -23,7 +23,7 @@ def generate_qr(data, error_correction, box_size, border, fill_color, back_color
     if logo:
         logo_img = Image.open(logo)
         pos = ((img.size[0] - logo_img.size[0]) // 2, (img.size[1] - logo_img.size[1]) // 2)
-        img.paste(logo_img, pos, logo_img)
+        img.paste(logo_img, pos)
 
     if rounded:
         img = ImageOps.expand(img, border=10, fill=fill_color)
@@ -146,19 +146,23 @@ if st.button("Generate QR Code"):
     if data:
         img = generate_qr(data, error_correction, box_size, border, fill_color, back_color, logo, rounded, shadow, rotate_angle, background_img, custom_icon)
         
-        # Display the generated QR code
-        st.image(img, caption="Your QR Code", use_column_width=True)
+        if img:
+            # Display the generated QR code
+            st.image(img, caption="Your QR Code", use_column_width=True)
 
-        # Convert image to byte stream for download
-img_buffer = io.BytesIO()
-img.save(img_buffer, format="PNG")
-img_buffer.seek(0)
+            # Convert image to byte stream for download
+            img_buffer = io.BytesIO()
+            img.save(img_buffer, format="PNG")
+            img_buffer.seek(0)
 
-# Provide the option to download the QR code image
-st.download_button(
-    label="Download QR Code",
-    data=img_buffer,
-    file_name="qr_code.png",
-    mime="image/png",
-)
-
+            # Provide the option to download the QR code image
+            st.download_button(
+                label="Download QR Code",
+                data=img_buffer,
+                file_name="qr_code.png",
+                mime="image/png",
+            )
+        else:
+            st.error("QR Code generation failed.")
+    else:
+        st.error("Please enter data for QR code generation.")
