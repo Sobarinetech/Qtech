@@ -2,3 +2,4 @@ streamlit
 google_generativeai
 qrcode
 Pillow 
+torch
