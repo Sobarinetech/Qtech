@@ -23,7 +23,7 @@ def generate_qr(data, error_correction, box_size, border, fill_color, back_color
     if logo:
         logo_img = Image.open(logo)
         pos = ((img.size[0] - logo_img.size[0]) // 2, (img.size[1] - logo_img.size[1]) // 2)
-        img.paste(logo_img, pos)
+        img.paste(logo_img, pos, logo_img)
 
     if rounded:
         img = ImageOps.expand(img, border=10, fill=fill_color)
