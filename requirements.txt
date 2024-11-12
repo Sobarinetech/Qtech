@@ -1,7 +1,4 @@
 streamlit
-Pillow
-qrcode
-pyzbar
-pyqrcode
-cv2
 google.generativeai
+qrcode
+PIL (Pillow)
