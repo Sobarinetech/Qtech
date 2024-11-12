@@ -4,7 +4,6 @@ import qrcode
 from PIL import Image, ImageDraw, ImageOps
 import io
 import random
-from io import BytesIO
 
 # Configure the API key securely from Streamlit's secrets
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
@@ -101,6 +100,50 @@ shadow = st.checkbox("Apply Shadow Effect")
 rotate_angle = st.slider("Rotate QR Code (degrees):", 0, 360, 0)
 background_img = st.file_uploader("Upload Background Image (optional):", type=["png", "jpg", "jpeg"])
 custom_icon = st.file_uploader("Upload Custom Icon (optional):", type=["png", "jpg", "jpeg"])
+
+def generate_qr(data, error_correction, box_size, border, fill_color, back_color, logo=None, rounded=False, shadow=False, rotate_angle=0, background_img=None, custom_icon=None):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=error_correction,
+        box_size=box_size,
+        border=border,
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color=fill_color, back_color=back_color)
+
+    if logo:
+        logo_img = Image.open(logo)
+        pos = ((img.size[0] - logo_img.size[0]) // 2, (img.size[1] - logo_img.size[1]) // 2)
+        img.paste(logo_img, pos)
+
+    if rounded:
+        img = ImageOps.expand(img, border=10, fill=fill_color)
+        mask = Image.new('L', img.size, 0)
+        draw = ImageDraw.Draw(mask)
+        draw.ellipse((10, 10, img.size[0] - 10, img.size[1] - 10), fill=255)
+        img.putalpha(mask)
+
+    if shadow:
+        img = ImageOps.expand(img, border=5, fill=back_color)
+
+    if rotate_angle:
+        img = img.rotate(rotate_angle, expand=True)
+
+    if background_img:
+        background = Image.open(background_img)
+        background.paste(img, ((background.size[0] - img.size[0]) // 2, (background.size[1] - img.size[1]) // 2))
+        img = background
+
+    if custom_icon:
+        icon_img = Image.open(custom_icon)
+        img.paste(icon_img, ((img.size[0] - icon_img.size[0]) // 2, (img.size[1] - icon_img.size[1]) // 2))
+
+    return img
+
+def generate_3d_qr(data, error_correction, box_size, border, fill_color, back_color):
+    # Implement your 3D QR code generation logic here
+    pass
 
 # Generate QR Code button
 if st.button("Generate QR Code"):
