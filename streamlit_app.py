@@ -51,10 +51,10 @@ def generate_qr(data, error_correction, box_size, border, fill_color, back_color
 
 # Streamlit App UI for Generative AI with QR Code
 st.title("Advanced QR Code Generator with Generative AI")
-st.write("Use Google Generative AI to get responses and generate customized QR codes based on your prompt.")
+st.write("Use Ever AI to get responses and generate customized QR codes based on your prompt.")
 
 # Generative AI Prompt input field
-prompt = st.text_input("Enter your prompt for AI response:", "most powerful free TTS?")
+prompt = st.text_input("Enter your prompt for AI response:", "best alternatives to Power BI?")
 
 # Button to generate AI response
 if st.button("Generate AI Response"):
