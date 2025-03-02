@@ -20,26 +20,35 @@ st.write("""
     Enter a prompt below and let the magic begin!
 """)
 
+# Initialize session state for the prompt if not already initialized
+if "user_prompt" not in st.session_state:
+    st.session_state.user_prompt = ""
+
 # Hardcode a pre-prompt that instructs the model to limit response to 2500 characters
 pre_prompt = "Generate the content in the input text area within 2500 characters."
 
 # Prompt input field where the user can enter their own prompt
 user_prompt = st.text_area(
     "Enter your prompt:",
+    value=st.session_state.user_prompt,
     placeholder="e.g., Best alternatives to JavaScript?",
     max_chars=500,
     height=200
 )
 
+# Store the input into session state so that it persists between reruns
+st.session_state.user_prompt = user_prompt
+
 # Display real-time character count
 st.markdown(f"**Character Count:** {len(user_prompt)} / 500 characters")
 
+# Button to clear the input
+if st.button("Clear Input"):
+    st.session_state.user_prompt = ""  # Clear session state input
+    st.experimental_rerun()  # This will refresh the app to reflect the cleared input
+
 # Combine the pre-prompt with the user input
 full_prompt = pre_prompt + "\n" + user_prompt
-
-# Clear Input Button
-if st.button("Clear Input"):
-    st.experimental_rerun()
 
 # Button to generate response
 if st.button("Generate Response"):
