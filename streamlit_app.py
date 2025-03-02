@@ -4,7 +4,6 @@ import qrcode
 from io import BytesIO
 import time
 from datetime import datetime, timedelta
-import threading
 
 # Configure the API key securely from Streamlit's secrets
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
@@ -16,7 +15,7 @@ TIME_LIMIT = timedelta(minutes=15)  # Time window of 15 minutes
 # Session state to track the user's generation history
 if "last_generated" not in st.session_state:
     st.session_state.last_generated = []
-    
+
 # Helper function to track and enforce rate-limiting
 def check_rate_limit():
     # Remove any old timestamps that are outside the 15-minute window
@@ -30,35 +29,83 @@ def check_rate_limit():
     return True
 
 # Streamlit App UI with enhanced features and animations
-st.title("Ever AI")
+st.set_page_config(page_title="Ever AI", page_icon=":robot:", layout="wide")
 st.markdown("""
     <style>
-    .stButton>button {
-        background-color: #4CAF50;
+    body {
+        background: linear-gradient(to right, #00c6ff, #0072ff);
         color: white;
-        padding: 10px 20px;
+        font-family: 'Arial', sans-serif;
+    }
+    .stButton>button {
+        background-color: #00d1b2;
+        color: white;
+        padding: 12px 24px;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 16px;
+        transition: background-color 0.3s ease;
     }
     .stButton>button:hover {
-        background-color: #45a049;
+        background-color: #00b59d;
+    }
+    .stTextArea textarea {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid #00d1b2;
+        color: white;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .stTextArea textarea:focus {
+        outline: none;
+        border-color: #00b59d;
+    }
+    .stMarkdown h3 {
+        text-align: center;
+        color: #f0f0f0;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .stMarkdown p {
+        color: #f0f0f0;
+        font-size: 18px;
+        text-align: center;
+        padding-bottom: 20px;
+    }
+    .stSpinner {
+        color: #00d1b2;
+    }
+    .stImage img {
+        border-radius: 15px;
+    }
+    .footer {
+        text-align: center;
+        color: #ffffff;
+        padding: 15px;
+        font-size: 14px;
+    }
+    .footer a {
+        color: #00d1b2;
+        text-decoration: none;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # Instructional text with animation
-st.write("""
-    <h3 style="color: #2d87f0;">Use generative AI to get responses based on your prompt!</h3>
-    <p style="color: #555;">Enter your prompt below and click "Generate Response". You can only generate up to 2 responses every 15 minutes to avoid abuse.</p>
+st.markdown("""
+    <h3>🚀 Welcome to Ever AI!</h3>
+    <p>Generate content with cutting-edge AI based on your prompt. You can generate up to 2 responses every 15 minutes.</p>
 """, unsafe_allow_html=True)
 
 # Hardcode a pre-prompt that instructs the model to limit response to 2500 characters
 pre_prompt = "Generate the content in the input text area within 2500 characters."
 
 # Prompt input field where the user can enter their own prompt
-user_prompt = st.text_area("Enter your prompt:", "Best alternatives to javascript?")
+user_prompt = st.text_area("Enter your prompt here:", "Best alternatives to javascript?")
 
 # Combine the pre-prompt with the user input
 full_prompt = pre_prompt + "\n" + user_prompt
@@ -77,8 +124,7 @@ else:
             model = genai.GenerativeModel('gemini-1.5-flash')
             
             # Generate response from the model with the combined prompt
-            with st.spinner("Generating response... Please wait."):
-
+            with st.spinner("💡 Generating your response... This might take a moment!"):
                 response = model.generate_content(full_prompt)
                 
                 # Extract the response text
@@ -91,7 +137,7 @@ else:
                 response_text = response_text.replace("**", "")
                 
                 # Display the response in Streamlit
-                st.write("Response:")
+                st.write("### Response:")
                 st.write(response_text)
                 
                 # Generate QR code for the response text
@@ -108,7 +154,7 @@ else:
                 img_bytes.seek(0)
                 
                 # Display the QR code with the new parameter
-                st.image(img_bytes, caption="QR Code for the Response", use_container_width=True)
+                st.image(img_bytes, caption="📱 Scan to View Response", use_container_width=True)
                 
                 # Convert response text to a downloadable file
                 response_file = BytesIO()
@@ -117,7 +163,7 @@ else:
                 
                 # Add download button for the generated content
                 st.download_button(
-                    label="Download Response",
+                    label="💾 Download Response",
                     data=response_file,
                     file_name="generated_response.txt",
                     mime="text/plain"
@@ -125,13 +171,13 @@ else:
                 
         except Exception as e:
             st.error(f"Error: {e}")
-    
-    # Display some cool animations after the process finishes
+
+    # Triggering cool animations after the process finishes
     st.balloons()  # Trigger streamlit balloons after generation
 
-    # Add a footer to the page
-    st.markdown("""
-        <footer style="text-align: center; color: #999;">
-            <p>Powered by Streamlit and Google Generative AI | <a href="https://github.com/yourusername/yourrepo">GitHub</a></p>
-        </footer>
-    """, unsafe_allow_html=True)
+# Footer with links
+st.markdown("""
+    <div class="footer">
+        <p>Powered by Streamlit and Google Generative AI | <a href="https://github.com/yourusername/yourrepo" target="_blank">GitHub</a></p>
+    </div>
+""", unsafe_allow_html=True)
