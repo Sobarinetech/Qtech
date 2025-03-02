@@ -7,10 +7,28 @@ import google.generativeai as genai
 # Configure API keys securely from Streamlit's secrets
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
+# Function to dynamically calculate QR code version based on data length
+def calculate_qr_version(data):
+    # Length-based version calculation to avoid errors
+    data_length = len(data)
+    if data_length < 100:
+        return 1
+    elif data_length < 200:
+        return 2
+    elif data_length < 400:
+        return 3
+    elif data_length < 800:
+        return 4
+    else:
+        return 5  # You can adjust this logic further as needed
+
 # QR Code Generator Function
 def generate_qr(data):
+    # Dynamically adjust version based on data size
+    version = calculate_qr_version(data)
+    
     qr = qrcode.QRCode(
-        version=None,  # Automatically determine the smallest version suitable for the data
+        version=version,  # Set the version based on data length
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=10,
         border=4,
