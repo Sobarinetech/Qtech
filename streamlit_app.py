@@ -10,8 +10,9 @@ genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 st.title("Ever AI")
 st.write("Use generative AI to get responses based on your prompt.")
 
-# Prompt input field
+# Prompt input field with length limitation
 prompt = st.text_input("Enter your prompt:", "Best alternatives to javascript?")
+prompt = prompt[:2500]  # Limit the prompt to 2500 characters
 
 # Button to generate response
 if st.button("Generate Response"):
@@ -22,13 +23,16 @@ if st.button("Generate Response"):
         # Generate response from the model
         response = model.generate_content(prompt)
         
+        # Limit the response to 2500 characters
+        response_text = response.text[:2500]
+        
         # Display response in Streamlit
         st.write("Response:")
-        st.write(response.text)
+        st.write(response_text)
         
         # Generate QR code for the response text
         qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
-        qr.add_data(response.text)
+        qr.add_data(response_text)
         qr.make(fit=True)
         
         # Convert QR code to image
@@ -38,7 +42,6 @@ if st.button("Generate Response"):
         st.image(img, caption="QR Code for the Response", use_column_width=True)
         
         # Convert response text to a downloadable file
-        response_text = response.text
         response_file = BytesIO()
         response_file.write(response_text.encode())
         response_file.seek(0)
