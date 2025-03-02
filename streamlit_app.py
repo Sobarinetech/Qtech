@@ -34,6 +34,9 @@ if st.button("Generate Response"):
         # Limit the response to 2500 characters
         response_text = response_text[:2500]
         
+        # Remove any instances of '**' from the response text
+        response_text = response_text.replace("**", "")
+        
         # Display the response in Streamlit
         st.write("Response:")
         st.write(response_text)
