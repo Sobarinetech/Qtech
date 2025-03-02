@@ -99,11 +99,15 @@ def generate_qr(data):
     # Dynamically adjust version based on data size
     version = calculate_qr_version(data)
     
+    # Dynamically adjust box size and border based on the QR version
+    box_size = max(5, version * 2)  # Larger version, larger box size
+    border_size = max(2, version // 2)  # Larger version, larger border size
+    
     qr = qrcode.QRCode(
         version=version,  # Set the version based on data length
         error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
+        box_size=box_size,
+        border=border_size,
     )
     qr.add_data(data)
     qr.make(fit=True)
