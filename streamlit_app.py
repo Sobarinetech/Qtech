@@ -3,7 +3,6 @@ import google.generativeai as genai
 import qrcode
 from io import BytesIO
 from datetime import datetime, timedelta
-import re
 
 # Configure the API key securely from Streamlit's secrets
 genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
@@ -103,8 +102,8 @@ st.markdown("""
     <p>Generate content with cutting-edge AI based on your prompt. You can generate up to 2 responses every 15 minutes.</p>
 """, unsafe_allow_html=True)
 
-# Hardcode a pre-prompt that instructs the model to limit response to 2500 characters
-pre_prompt = "Generate the content in the input text area within 2500 characters."
+# Updated pre-prompt to tell the AI to generate up to 2500 characters
+pre_prompt = "Please generate a response based on the following input, but ensure that the response does not exceed 2500 characters."
 
 # Prompt input field where the user can enter their own prompt
 user_prompt = st.text_area("Enter your prompt here:", "Best alternatives to javascript?", height=150)
@@ -131,18 +130,6 @@ else:
                 
                 # Extract the response text
                 response_text = response.text
-                
-                # Limit the response to 2500 characters while avoiding mid-sentence cutoffs
-                response_text = response_text[:2500]
-                
-                # Use a regular expression to find the last full sentence (if possible)
-                match = re.search(r'([^.]*\.)', response_text[::-1])
-                if match:
-                    # Reverse the matched part and slice the string up to that point
-                    response_text = response_text[:len(response_text) - match.end()]
-
-                # Remove any instances of '**' from the response text
-                response_text = response_text.replace("**", "")
                 
                 # Display the response in Streamlit
                 st.write("### Response:")
