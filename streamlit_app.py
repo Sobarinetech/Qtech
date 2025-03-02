@@ -1,7 +1,7 @@
 import streamlit as st
 import io
 import qrcode
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image
 import google.generativeai as genai
 
 # Configure API keys securely from Streamlit's secrets
@@ -10,7 +10,7 @@ genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 # QR Code Generator Function
 def generate_qr(data):
     qr = qrcode.QRCode(
-        version=1,  # Ensure version is within 1 to 40
+        version=None,  # Automatically determine the smallest version suitable for the data
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=10,
         border=4,
