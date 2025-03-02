@@ -35,7 +35,6 @@ st.markdown("""
         background: linear-gradient(to right, #00c6ff, #0072ff);
         color: white;
         font-family: 'Arial', sans-serif;
-        padding: 20px;
     }
     .stButton>button {
         background-color: #00d1b2;
@@ -46,7 +45,6 @@ st.markdown("""
         cursor: pointer;
         font-size: 16px;
         transition: background-color 0.3s ease;
-        margin-top: 20px;
     }
     .stButton>button:hover {
         background-color: #00b59d;
@@ -62,7 +60,6 @@ st.markdown("""
         max-width: 800px;
         height: 150px;
         box-sizing: border-box;
-        margin-bottom: 20px;
     }
     .stTextArea textarea:focus {
         outline: none;
@@ -85,14 +82,12 @@ st.markdown("""
     }
     .stImage img {
         border-radius: 15px;
-        margin-top: 20px;
     }
     .footer {
         text-align: center;
         color: #ffffff;
         padding: 15px;
         font-size: 14px;
-        margin-top: 30px;
     }
     .footer a {
         color: #00d1b2;
@@ -136,11 +131,9 @@ else:
                 # Extract the response text
                 response_text = response.text
                 
-                # Display the response in Streamlit, centered
-                st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+                # Display the response in Streamlit
                 st.write("### Response:")
                 st.write(response_text)
-                st.markdown("</div>", unsafe_allow_html=True)
                 
                 # Generate QR code for the response text
                 qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
@@ -155,25 +148,21 @@ else:
                 img.save(img_bytes)
                 img_bytes.seek(0)
                 
-                # Display the QR code centered
-                st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+                # Display the QR code with the new parameter
                 st.image(img_bytes, caption="📱 Scan to View Response", use_container_width=True)
-                st.markdown("</div>", unsafe_allow_html=True)
                 
                 # Convert response text to a downloadable file
                 response_file = BytesIO()
                 response_file.write(response_text.encode())
                 response_file.seek(0)
                 
-                # Add download button for the generated content, centered
-                st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+                # Add download button for the generated content
                 st.download_button(
                     label="💾 Download Response",
                     data=response_file,
                     file_name="generated_response.txt",
                     mime="text/plain"
                 )
-                st.markdown("</div>", unsafe_allow_html=True)
                 
         except Exception as e:
             st.error(f"Error: {e}")
