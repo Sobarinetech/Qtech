@@ -10,9 +10,14 @@ genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 st.title("Ever AI")
 st.write("Use generative AI to get responses based on your prompt.")
 
-# Prompt input field with length limitation
-prompt = st.text_input("Enter your prompt:", "Best alternatives to javascript?")
-prompt = prompt[:2500]  # Limit the prompt to 2500 characters
+# Hardcode a pre-prompt that instructs the model to limit response to 2500 characters
+pre_prompt = "Generate the content in the input text area within 2500 characters."
+
+# Prompt input field where the user can enter their own prompt
+user_prompt = st.text_area("Enter your prompt:", "Best alternatives to javascript?")
+
+# Combine the pre-prompt with the user input
+full_prompt = pre_prompt + "\n" + user_prompt
 
 # Button to generate response
 if st.button("Generate Response"):
@@ -20,13 +25,16 @@ if st.button("Generate Response"):
         # Load and configure the model
         model = genai.GenerativeModel('gemini-1.5-flash')
         
-        # Generate response from the model
-        response = model.generate_content(prompt)
+        # Generate response from the model with the combined prompt
+        response = model.generate_content(full_prompt)
+        
+        # Extract the response text
+        response_text = response.text
         
         # Limit the response to 2500 characters
-        response_text = response.text[:2500]
+        response_text = response_text[:2500]
         
-        # Display response in Streamlit
+        # Display the response in Streamlit
         st.write("Response:")
         st.write(response_text)
         
