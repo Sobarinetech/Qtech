@@ -35,11 +35,16 @@ if st.button("Generate Response"):
         qr.add_data(response_text)
         qr.make(fit=True)
         
-        # Convert QR code to image
+        # Convert QR code to image (PIL image)
         img = qr.make_image(fill='black', back_color='white')
         
-        # Display the QR code
-        st.image(img, caption="QR Code for the Response", use_column_width=True)
+        # Convert PIL image to BytesIO for Streamlit to render
+        img_bytes = BytesIO()
+        img.save(img_bytes)
+        img_bytes.seek(0)
+        
+        # Display the QR code with the new parameter
+        st.image(img_bytes, caption="QR Code for the Response", use_container_width=True)
         
         # Convert response text to a downloadable file
         response_file = BytesIO()
