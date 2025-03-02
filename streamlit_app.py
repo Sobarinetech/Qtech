@@ -9,18 +9,90 @@ genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 
 # Function to dynamically calculate QR code version based on data length
 def calculate_qr_version(data):
-    # Length-based version calculation to avoid errors
+    # Length-based version calculation to avoid errors, ensuring it falls within 1 to 40
     data_length = len(data)
+    
+    # Adjust QR code version based on data length, ensuring the version stays within bounds
     if data_length < 100:
         return 1
     elif data_length < 200:
         return 2
-    elif data_length < 400:
+    elif data_length < 300:
         return 3
-    elif data_length < 800:
+    elif data_length < 400:
         return 4
+    elif data_length < 500:
+        return 5
+    elif data_length < 600:
+        return 6
+    elif data_length < 700:
+        return 7
+    elif data_length < 800:
+        return 8
+    elif data_length < 900:
+        return 9
+    elif data_length < 1000:
+        return 10
+    elif data_length < 1100:
+        return 11
+    elif data_length < 1200:
+        return 12
+    elif data_length < 1300:
+        return 13
+    elif data_length < 1400:
+        return 14
+    elif data_length < 1500:
+        return 15
+    elif data_length < 1600:
+        return 16
+    elif data_length < 1700:
+        return 17
+    elif data_length < 1800:
+        return 18
+    elif data_length < 1900:
+        return 19
+    elif data_length < 2000:
+        return 20
+    elif data_length < 2100:
+        return 21
+    elif data_length < 2200:
+        return 22
+    elif data_length < 2300:
+        return 23
+    elif data_length < 2400:
+        return 24
+    elif data_length < 2500:
+        return 25
+    elif data_length < 2600:
+        return 26
+    elif data_length < 2700:
+        return 27
+    elif data_length < 2800:
+        return 28
+    elif data_length < 2900:
+        return 29
+    elif data_length < 3000:
+        return 30
+    elif data_length < 3100:
+        return 31
+    elif data_length < 3200:
+        return 32
+    elif data_length < 3300:
+        return 33
+    elif data_length < 3400:
+        return 34
+    elif data_length < 3500:
+        return 35
+    elif data_length < 3600:
+        return 36
+    elif data_length < 3700:
+        return 37
+    elif data_length < 3800:
+        return 38
+    elif data_length < 3900:
+        return 39
     else:
-        return 5  # You can adjust this logic further as needed
+        return 40  # Return the highest valid version (40)
 
 # QR Code Generator Function
 def generate_qr(data):
