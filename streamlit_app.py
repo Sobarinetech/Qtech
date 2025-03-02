@@ -28,13 +28,14 @@ def check_rate_limit():
     return True
 
 # Streamlit App UI with enhanced features and animations
-st.set_page_config(page_title="Ever AI", page_icon=":robot:", layout="centered")
+st.set_page_config(page_title="Ever AI", page_icon=":robot:", layout="wide")
 st.markdown("""
     <style>
     body {
         background: linear-gradient(to right, #00c6ff, #0072ff);
         color: white;
         font-family: 'Arial', sans-serif;
+        padding: 20px;
     }
     .stButton>button {
         background-color: #00d1b2;
@@ -45,6 +46,7 @@ st.markdown("""
         cursor: pointer;
         font-size: 16px;
         transition: background-color 0.3s ease;
+        margin-top: 20px;
     }
     .stButton>button:hover {
         background-color: #00b59d;
@@ -60,6 +62,7 @@ st.markdown("""
         max-width: 800px;
         height: 150px;
         box-sizing: border-box;
+        margin-bottom: 20px;
     }
     .stTextArea textarea:focus {
         outline: none;
@@ -88,6 +91,7 @@ st.markdown("""
         color: #ffffff;
         padding: 15px;
         font-size: 14px;
+        margin-top: 30px;
     }
     .footer a {
         color: #00d1b2;
