@@ -16,7 +16,7 @@ st.subheader("Use generative AI to get responses based on your prompt.")
 # Explanation
 st.write("""
     This app uses Google Generative AI to generate text-based responses based on the prompts you enter. 
-    The output will be limited to 2500 characters, and you can also generate a QR code for easy sharing.
+    The output will be limited to 5000 characters, and you can also generate a QR code for easy sharing.
     Enter a prompt below and let the magic begin!
 """)
 
@@ -25,7 +25,7 @@ if "user_prompt" not in st.session_state:
     st.session_state.user_prompt = ""
 
 # Hardcode a pre-prompt that instructs the model to limit response to 2500 characters
-pre_prompt = "Generate the content in the input text area within 2500 characters."
+pre_prompt = "Generate the content in the input text area within 5000 characters."
 
 # Prompt input field where the user can enter their own prompt
 user_prompt = st.text_area(
