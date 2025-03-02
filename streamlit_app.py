@@ -2,7 +2,6 @@ import streamlit as st
 import google.generativeai as genai
 import qrcode
 from io import BytesIO
-import time
 from datetime import datetime, timedelta
 
 # Configure the API key securely from Streamlit's secrets
@@ -58,7 +57,8 @@ st.markdown("""
         font-size: 16px;
         border-radius: 8px;
         width: 100%;
-        max-width: 600px;
+        max-width: 800px;
+        height: 150px;
         box-sizing: border-box;
     }
     .stTextArea textarea:focus {
