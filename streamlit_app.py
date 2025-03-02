@@ -132,7 +132,7 @@ else:
                 response_text = response.text
                 
                 # Limit the response to 2500 characters
-                response_text = response_text[:2500]
+                response_text = response_text[:2600]
                 
                 # Remove any instances of '**' from the response text
                 response_text = response_text.replace("**", "")
