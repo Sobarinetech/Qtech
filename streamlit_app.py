@@ -11,7 +11,7 @@ genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 # QR Code Generator Function
 def generate_qr(data, error_correction, box_size, border, fill_color, back_color, logo=None, rounded=False, shadow=False, rotate_angle=0, background_img=None, custom_icon=None):
     qr = qrcode.QRCode(
-        version=1,
+        version=1,  # Ensure version is within 1 to 40
         error_correction=error_correction,
         box_size=box_size,
         border=border,
@@ -51,7 +51,7 @@ def generate_qr(data, error_correction, box_size, border, fill_color, back_color
 
 # Streamlit App UI for Generative AI with QR Code
 st.title("Advanced QR Code Generator with Generative AI")
-st.write("Use Ever AI to get responses and generate customized QR codes based on your prompt.")
+st.write("Use AI to get responses and generate customized QR codes based on your prompt.")
 
 # Generative AI Prompt input field
 prompt = st.text_input("Enter your prompt for AI response:", "best alternatives to Power BI?")
