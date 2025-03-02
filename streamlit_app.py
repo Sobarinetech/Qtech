@@ -28,7 +28,7 @@ def check_rate_limit():
     return True
 
 # Streamlit App UI with enhanced features and animations
-st.set_page_config(page_title="Ever AI", page_icon=":robot:", layout="wide")
+st.set_page_config(page_title="Ever AI", page_icon=":robot:", layout="centered")
 st.markdown("""
     <style>
     body {
@@ -85,6 +85,7 @@ st.markdown("""
     }
     .stImage img {
         border-radius: 15px;
+        margin-top: 20px;
     }
     .footer {
         text-align: center;
@@ -135,9 +136,11 @@ else:
                 # Extract the response text
                 response_text = response.text
                 
-                # Display the response in Streamlit
+                # Display the response in Streamlit, centered
+                st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
                 st.write("### Response:")
                 st.write(response_text)
+                st.markdown("</div>", unsafe_allow_html=True)
                 
                 # Generate QR code for the response text
                 qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
@@ -152,21 +155,25 @@ else:
                 img.save(img_bytes)
                 img_bytes.seek(0)
                 
-                # Display the QR code with the new parameter
+                # Display the QR code centered
+                st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
                 st.image(img_bytes, caption="📱 Scan to View Response", use_container_width=True)
+                st.markdown("</div>", unsafe_allow_html=True)
                 
                 # Convert response text to a downloadable file
                 response_file = BytesIO()
                 response_file.write(response_text.encode())
                 response_file.seek(0)
                 
-                # Add download button for the generated content
+                # Add download button for the generated content, centered
+                st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
                 st.download_button(
                     label="💾 Download Response",
                     data=response_file,
                     file_name="generated_response.txt",
                     mime="text/plain"
                 )
+                st.markdown("</div>", unsafe_allow_html=True)
                 
         except Exception as e:
             st.error(f"Error: {e}")
