@@ -29,7 +29,7 @@ def check_rate_limit():
     return True
 
 # Streamlit App UI with enhanced features and animations
-st.set_page_config(page_title="Ever AI", page_icon=":robot:", layout="wide")
+st.set_page_config(page_title="Ever AI", page_icon=":robot:", layout="centered")
 st.markdown("""
     <style>
     body {
@@ -58,6 +58,7 @@ st.markdown("""
         font-size: 16px;
         border-radius: 8px;
         width: 100%;
+        max-width: 600px;
         box-sizing: border-box;
     }
     .stTextArea textarea:focus {
@@ -105,7 +106,7 @@ st.markdown("""
 pre_prompt = "Generate the content in the input text area within 2500 characters."
 
 # Prompt input field where the user can enter their own prompt
-user_prompt = st.text_area("Enter your prompt here:", "Best alternatives to javascript?")
+user_prompt = st.text_area("Enter your prompt here:", "Best alternatives to javascript?", height=150)
 
 # Combine the pre-prompt with the user input
 full_prompt = pre_prompt + "\n" + user_prompt
