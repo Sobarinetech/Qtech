@@ -103,7 +103,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Updated pre-prompt to tell the AI to generate up to 2500 characters
-pre_prompt = "Please generate a response based on the following input, but ensure that the response does not exceed 2500 characters."
+pre_prompt = "Please generate a response based on the following input, but ensure that the response does not exceed 5000 characters."
 
 # Prompt input field where the user can enter their own prompt
 user_prompt = st.text_area("Enter your prompt here:", "Best alternatives to javascript?", height=150)
