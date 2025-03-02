@@ -92,7 +92,7 @@ def calculate_qr_version(data):
     elif data_length < 3900:
         return 39
     else:
-        return 40  # Return the highest valid version (40)
+        return 50  # Return the highest valid version (40)
 
 # QR Code Generator Function
 def generate_qr(data):
