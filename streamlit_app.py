@@ -42,11 +42,6 @@ st.session_state.user_prompt = user_prompt
 # Display real-time character count
 st.markdown(f"**Character Count:** {len(user_prompt)} / 500 characters")
 
-# Button to clear the input
-if st.button("Clear Input"):
-    st.session_state.user_prompt = ""  # Clear session state input
-    st.experimental_rerun()  # This will refresh the app to reflect the cleared input
-
 # Combine the pre-prompt with the user input
 full_prompt = pre_prompt + "\n" + user_prompt
 
@@ -66,7 +61,7 @@ if st.button("Generate Response"):
             response_text = response.text
 
             # Limit the response to 2500 characters
-            response_text = response_text[:2500]
+            response_text = response_text[:5000]
 
             # Remove any instances of '**' from the response text
             response_text = response_text.replace("**", "")
